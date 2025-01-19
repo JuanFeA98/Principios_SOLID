@@ -8,7 +8,6 @@ from stripe.error import StripeError
 
 _ = load_dotenv()
 
-
 @dataclass
 class CustomerValidator:
     def validate(self, customer_data):
@@ -40,9 +39,6 @@ class Notifier:
             msg["From"] = "no-reply@example.com"
             msg["To"] = customer_data["contact_info"]["email"]
 
-            # server = smtplib.SMTP("localhost")
-            # server.send_message(msg)
-            # server.quit()
             print("Email sent to", customer_data["contact_info"]["email"])
 
         elif "phone" in customer_data["contact_info"]:
@@ -51,7 +47,6 @@ class Notifier:
             print(
                 f"send the sms using {sms_gateway}: SMS sent to {phone_number}: Thank you for your payment."
             )
-
 
 @dataclass
 class TransactionLogger:
