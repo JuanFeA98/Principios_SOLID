@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from utils import config_logging
+from Utils import config_logging
 
 @dataclass
 class CustomerDataValidator():
@@ -10,7 +10,7 @@ class CustomerDataValidator():
     def __init__(self, date: datetime):
         self.date = date
         self.day = int(str(self.date).replace('-', '')[:8])
-        self.logger = config_logging(self.day, append=True)
+        self.logger = config_logging.run(self.day, append=True)
 
     def validate(self, customer_data_info: dict):
         """Customer data valitation
@@ -45,7 +45,7 @@ class PaymentDataValidator():
     def __init__(self, date: datetime):
         self.date = date
         self.day = int(str(self.date).replace('-', '')[:8])
-        self.logger = config_logging(self.day, append=True)
+        self.logger = config_logging.run(self.day, append=True)
 
     def validate(self, payment_data_info: dict):
         """_summary_

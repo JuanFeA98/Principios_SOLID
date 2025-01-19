@@ -3,10 +3,9 @@ import os
 from datetime import datetime, timedelta
 
 import stripe
-
-from payment_processor import PaymentProcessor
-
 from dotenv import load_dotenv
+
+from src.payment_processor import PaymentProcessor
 
 _ = load_dotenv()
 date = datetime.now() + timedelta(0)

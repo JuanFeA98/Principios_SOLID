@@ -3,8 +3,8 @@ from datetime import datetime
 
 import stripe
 
-from validators import CustomerDataValidator, PaymentDataValidator
-from utils import config_logging, date_to_number, send_email
+from src.validators import CustomerDataValidator, PaymentDataValidator
+from Utils import config_logging, date_to_number, send_email
 
 class PaymentProcessor:
     """Class for processing payments."""
@@ -15,7 +15,7 @@ class PaymentProcessor:
         self.date = date
         self.is_customer_data_valid = False
         self.is_payment_data_valid = False
-        self.logger = config_logging(date_to_number(self.date), append=True)
+        self.logger = config_logging.run(date_to_number.run(self.date), append=True)
 
     def customer_data_validation(self):
         """Validation of customer data"""
@@ -60,7 +60,7 @@ class PaymentProcessor:
         if "email" in self.customer_data["contact_info"]:
 
             email = self.customer_data["contact_info"]["email"]
-            send_email(email)
+            send_email.run(email)
             self.logger.info('Email sent to %s', email)
 
         elif "phone" in self.customer_data["contact_info"]:
