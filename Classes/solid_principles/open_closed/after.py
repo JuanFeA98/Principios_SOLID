@@ -10,7 +10,6 @@ from stripe.error import StripeError
 
 _ = load_dotenv()
 
-
 class ContactInfo(BaseModel):
     email: Optional[str] = None
     phone: Optional[str] = None
