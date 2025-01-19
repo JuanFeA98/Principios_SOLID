@@ -1,10 +1,11 @@
 "Class for processing payment"
 from datetime import datetime
 
-import stripe
-
 from src.validators import CustomerDataValidator, PaymentDataValidator
-from Utils import config_logging, date_to_number, send_email
+from src.payment import StripePayment
+from src.notifier import EmailNotifier, SMSNotifier
+
+from Utils import config_logging, date_to_number
 
 class PaymentProcessor:
     """Class for processing payments."""
@@ -39,31 +40,22 @@ class PaymentProcessor:
         self.payment_data_validation()
 
         # Payment process
-        try:
-            charge = stripe.Charge.create(
-                amount=self.payment_data["amount"],
-                currency="usd",
-                source=self.payment_data["source"],
-                description=f'Charge for {self.customer_data["name"]}',
-            )
-
-            self.logger.info("Transaction successful: %s", charge["id"])
-            return charge
-
-        except stripe.error.StripeError as e:
-            self.logger.error("Stripe transaction failed: %s", str(e))
-            raise RuntimeError("Transaction failed.") from e
+        stripe_payment = StripePayment(self.date)
+        stripe_payment.process_transaction(self.customer_data, self.payment_data)
 
     def notifier(self):
         """Process to notificate the transaction"""
 
         if "email" in self.customer_data["contact_info"]:
 
-            email = self.customer_data["contact_info"]["email"]
-            send_email.run(email)
-            self.logger.info('Email sent to %s', email)
+            email_notifier = EmailNotifier(self.date)
+            email_notifier.send_notification(self.customer_data)
+
+            self.logger.info('Email sent')
 
         elif "phone" in self.customer_data["contact_info"]:
 
-            phone = self.customer_data["contact_info"]["phone"]
-            self.logger.info('SMS sent to %d: Thank you for your payment', phone)
+            sms_notifier = SMSNotifier(self.date)
+            sms_notifier.send_notification(self.customer_data)
+
+            self.logger.info('SMS sent')
