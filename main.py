@@ -36,6 +36,5 @@ def run():
     payment_processor.process_transaction()
     payment_processor.notifier()
 
-
 if __name__ == "__main__":
     run()
