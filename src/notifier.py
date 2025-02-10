@@ -28,4 +28,4 @@ class SMSNotifier(Notifier):
     def send_notification(self, customer_data):
         """Send the comunication by SMS"""
         phone = customer_data["contact_info"]["phone"]
-        self.logger.info('SMS sent to %d: Thank you for your payment', phone)
+        self.logger.info('SMS sent to %s: Thank you for your payment', phone)
